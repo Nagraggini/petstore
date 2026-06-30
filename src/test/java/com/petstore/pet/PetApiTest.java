@@ -22,16 +22,39 @@ public class PetApiTest extends BaseTest {
         @DisplayName("Trying it.")
         void tryTest() {
                 Response response = get("https://petstore.swagger.io/v2/pet/5");
-                response.getStatusCode();
-                response.getTime();
-
-                System.out.println("response.getBody().asString(): " + response.getBody().asString());
-                // response.getBody().asString():
-                // {"id":2,"name":"Doggie","photoUrls":[],"tags":[],"status":"available"}
-                System.out.println("getStatusLine: " + response.getStatusLine());
-                System.out.println("content-type: " + response.getHeader("content-type"));
-
                 assertEquals(response.getStatusCode(), 200);
+
+                /*
+                 * System.out.println("===== STATUS =====");
+                 * System.out.println(response.getStatusCode());
+                 * System.out.println("------------------------------------");
+                 * System.out.println("getStatusLine: \n" + response.getStatusLine());
+                 * 
+                 * System.out.println("\n===== HEADERS =====");
+                 * System.out.println("getHeaders: \n" + response.getHeaders());
+                 * System.out.println("------------------------------------");
+                 * System.out.println("content-type: \n" + response.getHeader("content-type"));
+                 * 
+                 * System.out.println("\n===== BODY =====");
+                 * System.out.println("getBody(): \n" + response.getBody().asString());
+                 * 
+                 * System.out.println("\n===== RESPONSE TIME =====");
+                 * System.out.println(response.getTime() + " ms");
+                 * System.out.println("------------------------------------");
+                 * System.out.println(response.jsonPath().getInt("id"));
+                 * System.out.println(response.jsonPath().getString("name"));
+                 * System.out.println(response.jsonPath().getString("status"));
+                 * 
+                 * 
+                 * 
+                 * System.out.println("------------------------------------");
+                 * 
+                 * given()
+                 * .when()
+                 * .get("https://petstore.swagger.io/v2/pet/5")
+                 * .then()
+                 * .log().all();
+                 */
         }
 
         /**
@@ -65,9 +88,8 @@ public class PetApiTest extends BaseTest {
 
                 assertEquals(petId, response.jsonPath().getInt("id"));
                 assertEquals("doggie", response.jsonPath().getString("name"));
+                assertTrue(response.jsonPath().getString("name").contains("dog"));
                 assertEquals("string", response.jsonPath().getString("status"));
-
-                System.out.println("StatusCode: " + response.getStatusCode() + "; getTime: " + response.getTime());
         }
 
         /**
@@ -109,7 +131,8 @@ public class PetApiTest extends BaseTest {
                                 .statusCode(200);
 
                 assertTrue(response.jsonPath().getString("status").contains(status));
-
+                // getList("$") → teljes lista
+                assertTrue(response.jsonPath().getList("$").size() > 0);
         }
 
 }
