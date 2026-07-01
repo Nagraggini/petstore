@@ -13,4 +13,8 @@ In order to run the tests execute:
 
 ```mvn clean test```
 
+Run only one test:
+
+```mvn -Dtest=PetApiPractisingTest#getOneIdAndCheckStatusCode test```
+
 After execution completes, report will be available in ```target/surefire-reports/html/index.html```

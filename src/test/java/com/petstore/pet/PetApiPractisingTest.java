@@ -1,6 +1,11 @@
 package com.petstore.pet;
 
+import java.util.List;
+import java.util.Map;
+
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.petstore.base.BaseTest;
@@ -14,7 +19,7 @@ public class PetApiPractisingTest extends BaseTest {
      * Kérd le a petet ID = 5. Ellenőrizd, hogy a státuszkód 200
      */
     @Test
-    void one() {
+    void getOneIdAndCheckStatusCode() {
         int petId = 5;
         given().pathParam("petId", petId).when().get("/pet/{petId}").then().statusCode(200);
     }
@@ -23,16 +28,17 @@ public class PetApiPractisingTest extends BaseTest {
      * Kérd le a petet ID = 5. Írasd ki a teljes JSON választ
      */
     @Test
-    void two() {
+    void getPetByIdAndWriteAllResponseToTheConsole() {
         int petId = 5;
-        given().pathParam("petId", petId).when().get("/pet/{petId}").then().log().all();
+        // given().pathParam("petId",
+        // petId).when().get("/pet/{petId}").then().log().all();
     }
 
     /**
      * Kérd le a petet ID = 5. Olvasd ki a name mezőt, és írasd ki a konzolra.
      */
     @Test
-    void three() {
+    void getPetByIdAndWriteNameToTheConsole() {
         int petId = 5;
         Response response = given().pathParam("petId", petId).when().get("/pet/{petId}");
         System.out.println("name: " + response.jsonPath().getString("name"));
@@ -42,7 +48,7 @@ public class PetApiPractisingTest extends BaseTest {
      * Kérd le a petet ID = 5. Ellenőrizd, hogy a status értéke "available"
      */
     @Test
-    void four() {
+    void getPetByIdAndCheckAvailableStatus() {
         int petId = 5;
         Response response = given().pathParam("petId", petId).when().get("/pet/{petId}");
         assertFalse(response.jsonPath().getString("status").equals("available"));
@@ -53,7 +59,7 @@ public class PetApiPractisingTest extends BaseTest {
      * URL-be.
      */
     @Test
-    void five() {
+    void getPetByIdAndUsePathParam() {
         int petId = 10;
         Response response = given().pathParam("petId", petId).when().get("/pet/{petId}");
     }
@@ -62,11 +68,14 @@ public class PetApiPractisingTest extends BaseTest {
      * Kérd le a "available" státuszú peteket, queryParam-ot használj.
      */
     @Test
-    void six() {
+    void getAvailableStatusPets() {
         String status = "available";
 
+        Response response = given().pathParam("status", status).when().get("/pet/findByStatus?status={status}");
+        assertTrue(response.jsonPath().getList("$").size() > 0);
     }
-    /*
+
+    /**
      * 7. feladat – Lista méret
      * 
      * Ugyanaz a /findByStatus kérés.
@@ -74,8 +83,17 @@ public class PetApiPractisingTest extends BaseTest {
      * Feladat:
      * 
      * írasd ki, hány petet kaptál vissza
-     * 
-     * 🟡 8. feladat – Első elem
+     */
+    @Test
+    void findByAvailableStatusAndCountThem() {
+        String status = "available";
+
+        Response response = given().pathParam("status", status).when().get("/pet/findByStatus?status={status}");
+        System.out.println(" " + response.jsonPath().getList("$").size() + " db elérhető kisállat");
+    }
+
+    /**
+     * 8. feladat – Első elem
      * 
      * A /findByStatus válaszból:
      * 
@@ -85,74 +103,23 @@ public class PetApiPractisingTest extends BaseTest {
      * id
      * name
      * status
-     * 
-     * 🟠 9. feladat – Contains ellenőrzés
-     * 
-     * Kérd le a peteket "pending" státusszal.
-     * 
-     * Feladat:
-     * 
-     * ellenőrizd, hogy az első pet neve tartalmazza a "dog" szót
-     * 
-     * 🟠 10. feladat – Headers kiírás
-     * 
-     * Kérd le a petet ID = 5.
-     * 
-     * Feladat:
-     * 
-     * írasd ki az összes HTTP headert
-     * 
-     * 🟠 11. feladat – Content-Type ellenőrzés
-     * 
-     * Kérd le a petet ID = 5.
-     * 
-     * Feladat:
-     * 
-     * ellenőrizd, hogy:
-     * Content-Type = application/json
-     * 
-     * 🔴 12. feladat – Hibás pet
-     * 
-     * Kérd le a petet ID = 999999
-     * 
-     * Feladat:
-     * 
-     * ellenőrizd, hogy:
-     * 404-es státuszkód jön
-     * 
-     * 🔴 13. feladat – Hibaüzenet
-     * 
-     * A 999999-es pet esetén:
-     * 
-     * Feladat:
-     * 
-     * olvasd ki:
-     * code
-     * type
-     * message
-     * 
-     * 🔴 14. feladat – Minden status ellenőrzése
-     * 
-     * findByStatus?status=pending
-     * 
-     * Feladat:
-     * 
-     * ellenőrizd, hogy MINDEN visszakapott pet:
-     * status == "pending"
-     * 
-     * 🔥 15. feladat – Mini challenge
-     * 
-     * Kombináld:
-     * 
-     * queryParam
-     * lista kezelése
-     * assert
-     * 
-     * Feladat:
-     * 
-     * kérd le az "available" peteket
-     * írasd ki:
-     * hány darab van
-     * az első és utolsó pet neve
      */
+    @Test
+    void getfindByAvailableStatusAndWriteFirstPet() {
+        String status = "available";
+
+        Response response = given()
+                .queryParam("status", status)
+                .when()
+                .get("/pet/findByStatus");
+
+        response.then().statusCode(200).body("[0].name", equalTo("Dog-1782907715799"));
+
+        List<Map<String, Object>> pets = response.jsonPath().getList("$");
+
+        System.out.println("-----------------------");
+        System.out.println("Az első elérhető kisállat (id,name,status):" + pets.get(0));
+        System.out.println("-----------------------");
+    }
+
 }
