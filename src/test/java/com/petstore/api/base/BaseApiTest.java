@@ -1,4 +1,4 @@
-package com.petstore.base;
+package com.petstore.api.base;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,14 +12,20 @@ import org.junit.jupiter.api.BeforeAll;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
 
-public class BaseTest {
+public class BaseApiTest {
 
     protected static PrintStream fileOut;
 
     @BeforeAll
     public static void setup() throws FileNotFoundException {
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
+
+        // Ez egy alapbeállítás az összes teszthez.
+        RestAssured.requestSpecification = RestAssured
+                .given()
+                .accept(ContentType.JSON);
 
         File directory = new File("logs");
         if (!directory.exists()) {

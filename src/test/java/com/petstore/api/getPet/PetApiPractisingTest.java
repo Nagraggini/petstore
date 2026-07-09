@@ -1,4 +1,4 @@
-package com.petstore.pet;
+package com.petstore.api.getPet;
 
 import java.util.List;
 import java.util.Map;
@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
-import com.petstore.base.BaseTest;
+import com.petstore.api.base.BaseApiTest;
 
 import static io.restassured.RestAssured.given;
 import io.restassured.response.Response;
 
-public class PetApiPractisingTest extends BaseTest {
+public class PetApiPractisingTest extends BaseApiTest {
 
     /**
      * Kérd le a petet ID = 5. Ellenőrizd, hogy a státuszkód 200
@@ -121,5 +121,8 @@ public class PetApiPractisingTest extends BaseTest {
         System.out.println("Az első elérhető kisállat (id,name,status):" + pets.get(0));
         System.out.println("-----------------------");
     }
+
+    // TODO:
+    // https://www.youtube.com/watch?v=EvG8r7AhanI&list=PLhW3qG5bs-L8xPrBwDv66cTMlFNeUPdJx&index=10
 
 }
