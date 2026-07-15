@@ -73,9 +73,10 @@ public class BaseApiTest {
                     .when()
                     .delete("/pet/" + id)
                     .then()
+                    .log().ifValidationFails()
                     .statusCode(anyOf(is(200), is(404)))
-                    // .body("$", anyOf(anEmptyMap(), nullValue()));
-                    .log().ifValidationFails();
+            // .body("$", anyOf(anEmptyMap(), nullValue()));
+            ;
         }
     }
 }
