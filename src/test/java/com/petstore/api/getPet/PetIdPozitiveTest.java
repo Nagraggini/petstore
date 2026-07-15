@@ -9,10 +9,12 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.petstore.api.base.BaseApiTest;
+import com.petstore.model.Pet;
 
 import static io.restassured.RestAssured.given;
 import io.restassured.response.Response;
@@ -34,7 +36,9 @@ public class PetIdPozitiveTest extends BaseApiTest {
     void checkOnePet() {
         long id = createdPetIds.get(0);
 
-        Response responseObject = given().get("/pet/{id}", id).then().statusCode(200)
+        Response responseObject = given().get("/pet/{id}", id).then().log()
+                .ifValidationFails() // A jó log, csak baj esetén szól (ha pl.: nem létező státuszt adunk
+                                     // meg).statusCode(200)
                 .body("id", notNullValue())
                 .body("status", equalTo("available"))
                 .extract().response(); // Lehet az extract() után .path("id") is.
@@ -69,12 +73,30 @@ public class PetIdPozitiveTest extends BaseApiTest {
     }
 
     @Test
+    void petIdSuccessTestToPetObject() {
+        /* Mivel a Jackson be lett importálva, ő képes jsonból objektumot generálni. */
+
+        Pet petObj = given().when().get("/pet/1").then().statusCode(200).extract().as(Pet.class);
+
+        /*
+         * A .as(Pet.class) hívás mögött a Jackson JSON könyvtár dolgozik.
+         * Ő végzi el a deszerializálást: a JSON mezőit hozzárendeli
+         * a User osztály mezőihez.
+         */
+
+        assertEquals(1, petObj.getId());
+        assertTrue(petObj.getName().length() > 0);
+        assertNotNull(petObj.getStatus());
+    }
+
+    @Test
     void checkMultiplePets() {
         given()
                 .queryParam("status", "available")
                 .when()
                 .get("/pet/findByStatus")
                 .then()
+                .log().ifValidationFails() // A jó log, csak baj esetén szól (ha pl.: nem létező státuszt adunk meg)
                 .statusCode(200)
                 // Ellenőrzi, hogy a visszaadott listában megvan-e mindkét állat.
                 .body("name", hasItems(("Doggie_" + createdPetIds.get(0)), "Doggie_" + createdPetIds.get(3)));
@@ -87,6 +109,7 @@ public class PetIdPozitiveTest extends BaseApiTest {
                 .when()
                 .get("/pet/{id}", createdPetIds.get(1))
                 .then()
+                .log().ifValidationFails() // A jó log, csak baj esetén szól (ha pl.: nem létező státuszt adunk meg)
                 .statusCode(200)
                 .body("name", containsString("Doggie"))
                 // A "tags.name" kigyűjti az összes címke nevét egy listába
