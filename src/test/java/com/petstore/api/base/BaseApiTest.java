@@ -1,54 +1,81 @@
 package com.petstore.api.base;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 
 import io.restassured.RestAssured;
-import io.restassured.filter.log.RequestLoggingFilter;
-import io.restassured.filter.log.ResponseLoggingFilter;
+import static io.restassured.RestAssured.given;
 import io.restassured.http.ContentType;
 
 public class BaseApiTest {
 
-    protected static PrintStream fileOut;
+    public static List<Long> createdPetIds = new ArrayList<>();
 
     @BeforeAll
-    public static void setup() throws FileNotFoundException {
+    public static void setup() {
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
 
         // Ez egy alapbeállítás az összes teszthez.
         RestAssured.requestSpecification = RestAssured
                 .given()
-                .accept(ContentType.JSON);
+                .accept(ContentType.JSON); // json formátumú választ várunk
 
-        File directory = new File("logs");
-        if (!directory.exists()) {
-            directory.mkdir();
+        // Ezzel lehet kiírni a konzolra az összes infót.
+        // RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
+
+        String tagName = "MyCustomTag";
+        // A 4 kívánt státusz definiálása
+        String[] statuses = { "available", "pending", "sold", "available" };
+
+        // Ciklus 4 állat létrehozásához (a státuszok száma alapján)
+        for (int i = 0; i < statuses.length; i++) {
+            long randomId = Math.abs(UUID.randomUUID().getMostSignificantBits());
+            createdPetIds.add(randomId);
+
+            String name = "Doggie_" + randomId;
+            String currentStatus = statuses[i]; // Az aktuális státusz kivétele a tömbből
+
+            String requestBody = """
+                    {
+                        "id": %d,
+                        "name": "%s",
+                        "status": "%s",
+                        "tags": [{"id": 0, "name": "%s"}]
+                    }
+                    """.formatted(randomId, name, currentStatus, tagName);
+
+            given()
+                    .contentType(ContentType.JSON)
+                    .body(requestBody)
+                    .when()
+                    .post("/pet")
+                    .then()
+                    .statusCode(200)
+                    .log().ifValidationFails();
+
         }
-
-        String timeStamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
-        String filePath = "logs/test-" + timeStamp + ".log";
-
-        // Az osztályszintű változó inicializálása
-        fileOut = new PrintStream(new FileOutputStream(filePath));
-
-        // Filterek beállítása egyszer
-        RestAssured.filters(
-                new RequestLoggingFilter(fileOut),
-                new ResponseLoggingFilter(fileOut));
-
     }
 
-    // Segédmetódus a log fájl "elválasztásához"
-    protected void logTestHeader(String testName) {
-        fileOut.println("\n" + "=".repeat(20));
-        fileOut.println("TESZT KEZDETE: " + testName);
-        fileOut.println("=".repeat(20) + "\n");
+    /**
+     * Töröljük a teszthez létrehozott 5 db állatot.
+     */
+    @AfterAll
+    public static void teardown() {
+        // Ciklus az állatok törléséhez.
+        for (Long id : createdPetIds) {
+            given()
+                    .when()
+                    .delete("/pet/" + id)
+                    .then()
+                    .statusCode(anyOf(is(200), is(404)))
+                    // .body("$", anyOf(anEmptyMap(), nullValue()));
+                    .log().ifValidationFails();
+        }
     }
 }
