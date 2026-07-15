@@ -28,8 +28,11 @@ public class PetListTest extends BaseApiTest {
     void petListTest() {
         String statusLvl = "available";
 
-        given().when().get("/pet/findByStatus?status={statusLvl}", statusLvl).then().statusCode(200).body("$",
-                notNullValue())// a válasz nem nullérték
+        given().when().get("/pet/findByStatus?status={statusLvl}", statusLvl).then()
+                // .log().all() // response logolása
+                .log().ifValidationFails() // A jó log, csak baj esetén szól (ha pl.: nem létező státuszt adunk meg)
+                .statusCode(200).body("$",
+                        notNullValue())// a válasz nem nullérték
                 .body("$", instanceOf(List.class)) // a válasz egy lista
                 .body("size()", greaterThan(0)) // a lista nem üres
                 .body("[0].id", notNullValue()) // az első elemnek van id mezője
