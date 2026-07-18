@@ -23,7 +23,7 @@ jobs:
                   java-version: "21"
 
             - name: Run Maven Tests
-              run: ./mvnw -B clean test -DCI=true
+              run: mvn -B clean test -DCI=true
 
             - name: Upload surefire test reports
               uses: actions/upload-artifact@v4
@@ -35,7 +35,7 @@ jobs:
             # Generate Allure Report
             # =========================
             - name: Generate Allure Report
-              run: mvnw allure:report
+              run: ./mvnw allure:report
 
             # =========================
             # Prepare GitHub Pages folder
@@ -44,9 +44,9 @@ jobs:
               run: |
                   rm -rf public
                   mkdir -p public
+
                   cp -r target/site/allure-maven-plugin/* public/ 2>/dev/null || true
                   cp -r target/site/allure-report/* public/ 2>/dev/null || true
-                  cp -r target/site/allure-maven-plugin/* public/
 
             # =========================
             # Deploy to GitHub Pages
