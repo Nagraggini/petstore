@@ -43,10 +43,10 @@ jobs:
             - name: Prepare GitHub Pages folder
               run: |
                   rm -rf public
-                  mkdir -p public             
-                  cp -r target/site/allure-maven-plugin public/allure-report 2>/dev/null || true
-                  cp -r target/site/allure-report public/allure-report 2>/dev/null || true
-                  echo "<a href='allure-report/index.html'>Allure</a>" > public/index.html
+                  mkdir -p public
+
+                  cp -r target/site/allure-maven-plugin/* public/ 2>/dev/null || true
+                  cp -r target/site/allure-report/* public/ 2>/dev/null || true
 
             # =========================
             # Deploy to GitHub Pages
