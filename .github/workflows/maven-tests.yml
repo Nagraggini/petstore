@@ -35,7 +35,7 @@ jobs:
             # Generate Allure Report
             # =========================
             - name: Generate Allure Report
-              run: ./mvnw allure:report
+              run: mvnw allure:report
 
             # =========================
             # Prepare GitHub Pages folder
