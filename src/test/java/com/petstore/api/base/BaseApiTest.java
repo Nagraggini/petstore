@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.is;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.given;
@@ -15,16 +15,18 @@ import io.restassured.http.ContentType;
 
 public class BaseApiTest {
 
-    public static List<Long> createdPetIds = new ArrayList<>();
+    protected List<Long> createdPetIds = new ArrayList<>();
 
-    @BeforeAll
-    public static void setup() {
+    @BeforeEach
+    public void setupDatas() {
+        createdPetIds.clear();
         RestAssured.baseURI = "https://petstore.swagger.io/v2";
 
         // Ez egy alapbeállítás az összes teszthez.
         RestAssured.requestSpecification = RestAssured
                 .given()
-                .accept(ContentType.JSON); // json formátumú választ várunk
+                .accept(ContentType.JSON) // json formátumú választ várunk
+                .contentType(ContentType.JSON); // json formátumban küldjük a kérést
 
         // Ezzel lehet kiírni a konzolra az összes infót.
         // RestAssured.filters(new RequestLoggingFilter(), new ResponseLoggingFilter());
@@ -63,10 +65,10 @@ public class BaseApiTest {
     }
 
     /**
-     * Töröljük a teszthez létrehozott 5 db állatot.
+     * Töröljük a teszthez létrehozott 4 db állatot.
      */
-    @AfterAll
-    public static void teardown() {
+    @AfterEach
+    public void teardown() {
         // Ciklus az állatok törléséhez.
         for (Long id : createdPetIds) {
             given()

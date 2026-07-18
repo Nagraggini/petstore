@@ -72,11 +72,17 @@ public class PetIdPozitiveTest extends BaseApiTest {
         assertEquals(id, responseId);
     }
 
+    /**
+     * POJO modell használata.
+     */
     @Test
     void petIdSuccessTestToPetObject() {
+
+        long id = createdPetIds.get(0);
+
         /* Mivel a Jackson be lett importálva, ő képes jsonból objektumot generálni. */
 
-        Pet petObj = given().when().get("/pet/1").then().statusCode(200).extract().as(Pet.class);
+        Pet petObj = given().when().get("/pet/" + id).then().statusCode(200).extract().as(Pet.class);
 
         /*
          * A .as(Pet.class) hívás mögött a Jackson JSON könyvtár dolgozik.
@@ -84,7 +90,7 @@ public class PetIdPozitiveTest extends BaseApiTest {
          * a User osztály mezőihez.
          */
 
-        assertEquals(1, petObj.getId());
+        assertEquals(id, petObj.getId());
         assertTrue(petObj.getName().length() > 0);
         assertNotNull(petObj.getStatus());
     }

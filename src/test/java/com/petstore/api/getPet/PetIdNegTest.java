@@ -1,7 +1,9 @@
 package com.petstore.api.getPet;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.anyOf;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import org.junit.jupiter.api.Test;
 
 import com.petstore.api.base.BaseApiTest;
@@ -26,10 +28,16 @@ public class PetIdNegTest extends BaseApiTest {
     void petIdUnsuccesfulTest() {
         String expectedMessage = "Pet not found";
 
+        int id = 999;
+
+        // Előtte törlöm a kisállatot, ha létezik.
+        given().when().delete("/pet/" + id).then().log().ifValidationFails()
+                .statusCode(anyOf(is(200), is(404)));
+
         // 1. Kérés küldése és válasz elmentése
         String responseBody = given()
-                .accept(ContentType.XML)
-                .pathParam("petId", "999")
+                .accept(ContentType.XML) // Megváltoztatjuk az elfogadható válasz típusát XML-re.
+                .pathParam("petId", id)
                 .when()
                 .get("pet/{petId}")
                 .then()

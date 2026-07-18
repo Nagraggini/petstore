@@ -2,7 +2,10 @@
 
 This repository contains an example test suite for the [Swagger Petstore API](https://petstore.swagger.io/). It serves as a practical implementation of API test automation.
 
-Toolbox:
+# Test Report
+![Allure Report](/docs/assets/img/allure_report.png.png)
+
+# Toolbox
 
 - Test automation framework: JUnit
 - Reporting: Maven Surefire Reports
@@ -17,7 +20,11 @@ Requirements:
 
 To run the tests, execute:
 
-```mvn clean test```
+On Linux:
+```./mvnw clean test```
+
+On Windows:
+```mvnw clean test```
 
 To run a single test:                  
 
