@@ -72,6 +72,9 @@ public class PetIdPozitiveTest extends BaseApiTest {
         assertEquals(id, responseId);
     }
 
+    /**
+     * POJO modell használata.
+     */
     @Test
     void petIdSuccessTestToPetObject() {
 

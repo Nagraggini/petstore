@@ -2,7 +2,7 @@ package com.petstore.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-//POJO osztály
+//POJO osztály (Plain Old Java Object)
 //Csak azokat a mezőket veszi figyelembe, 
 //amiket az osztály adattagjaiként létrehozunk.
 @JsonIgnoreProperties(ignoreUnknown = true)
