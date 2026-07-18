@@ -1,4 +1,4 @@
-name: Run Selenium API Tests
+name: Run Rest Assured API Tests
 
 on:
     push:
@@ -23,7 +23,7 @@ jobs:
                   java-version: "21"
 
             - name: Run Maven Tests
-              run: mvn -B clean test -DCI=true
+              run: ./mvnw -B clean test -DCI=true
 
             - name: Upload surefire test reports
               uses: actions/upload-artifact@v4
@@ -44,9 +44,7 @@ jobs:
               run: |
                   rm -rf public
                   mkdir -p public
-
-                  cp -r target/site/allure-maven-plugin/* public/ 2>/dev/null || true
-                  cp -r target/site/allure-report/* public/ 2>/dev/null || true
+                  cp -r target/site/allure-maven-plugin/* public/
 
             # =========================
             # Deploy to GitHub Pages

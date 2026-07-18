@@ -1,23 +1,33 @@
+[![Run Rest Assured API Tests](https://github.com/Nagraggini/petstore/actions/workflows/maven-tests.yml/badge.svg)](https://github.com/Nagraggini/petstore/actions/workflows/maven-tests.yml)
+
+![Top Language](https://img.shields.io/github/languages/top/Nagraggini/petstore)
+![Rest Assured](https://img.shields.io/badge/Rest%20Assured-API-orange) ![License](https://img.shields.io/badge/license-MIT-green)
+
+
 ## REST API Tests: Swagger Petstore 
 
-This repository contains an example test suite for the [Swagger Petstore API](https://petstore.swagger.io/). It serves as a practical implementation of API test automation.
+This repository contains an automated REST API test suite for the [Swagger Petstore API](https://petstore.swagger.io/).
 
-# Test Report
-![Allure Report](/docs/assets/img/allure_report.png)
+The project demonstrates API testing using REST Assured, JUnit 5, Maven, Allure Report, and GitHub Actions CI/CD.
 
-# Toolbox
+## Allure Test Report
+![Allure Report](docs/assets/img/allure_report.png)
+📊 [View the Allure Report](https://nagraggini.github.io/petstore/)
 
-- Test automation framework: JUnit
-- Reporting: Maven Surefire Reports
-- API client/testing framework: rest-assured
+## Toolbox
+
+- Programming language: Java 21
+- Test automation framework: JUnit 5
+- API testing framework: REST Assured
+- Reporting: Allure Report
 - Build tool: Maven
-- Java 15 or later
+- CI/CD: GitHub Actions
 
 Requirements:
-- JDK 8+
+- JDK 21+
 - Maven 3.x
-- An active internet connection is required to reach the Petstore API.
-
+- Internet connection
+  
 To run the tests, execute:
 
 On Linux:
@@ -30,4 +40,13 @@ To run a single test:
 
 ```./mvnw -Dtest=PetIdPozitiveTest#checkOnePet test```
 
-After execution completes, report will be available in ```/allure-report/index.html```
+## Covered Test Scenarios
+
+- GET pet by ID
+- POST create new pet
+- PUT update existing pet
+- DELETE pet
+- HTTP status code validation
+- Response body validation
+- JSON schema/content validation
+- Positive and negative test cases
