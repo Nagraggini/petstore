@@ -3,7 +3,7 @@
 This repository contains an example test suite for the [Swagger Petstore API](https://petstore.swagger.io/). It serves as a practical implementation of API test automation.
 
 # Test Report
-![Allure Report](/docs/assets/img/allure_report.png.png)
+![Allure Report](/docs/assets/img/allure_report.png)
 
 # Toolbox
 
@@ -11,7 +11,7 @@ This repository contains an example test suite for the [Swagger Petstore API](ht
 - Reporting: Maven Surefire Reports
 - API client/testing framework: rest-assured
 - Build tool: Maven
-- Java 8 or later
+- Java 15 or later
 
 Requirements:
 - JDK 8+
@@ -28,6 +28,6 @@ On Windows:
 
 To run a single test:                  
 
-```mvn -Dtest=PetApiPractisingTest#getOneIdAndCheckStatusCode test```
+```./mvnw -Dtest=PetIdPozitiveTest#checkOnePet test```
 
-After execution completes, report will be available in ```target/surefire-reports/html/index.html```
+After execution completes, report will be available in ```/allure-report/index.html```
