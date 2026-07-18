@@ -44,6 +44,8 @@ jobs:
               run: |
                   rm -rf public
                   mkdir -p public
+                  cp -r target/site/allure-maven-plugin/* public/ 2>/dev/null || true
+                  cp -r target/site/allure-report/* public/ 2>/dev/null || true
                   cp -r target/site/allure-maven-plugin/* public/
 
             # =========================
