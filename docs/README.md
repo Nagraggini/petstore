@@ -2,3 +2,4 @@
 
 Ebben a projektben lévő pom.xml egy kicsit más. 
 
+[REST Assured Beginner Tutorial](https://www.youtube.com/watch?v=EvG8r7AhanI&list=PLhW3qG5bs-L8xPrBwDv66cTMlFNeUPdJx&index=10)
