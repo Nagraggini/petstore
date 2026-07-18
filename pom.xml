@@ -11,17 +11,14 @@
 
     <url>https://petstore.swagger.io/</url>
 
-    <!--Verzió megadása, de nem kötelező ezeknél is működik. Ezzel még biztosabb lesz a program.-->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.release>17</maven.compiler.release>
+        <allure.version>2.29.1</allure.version>
     </properties>
 
-    <!--BOM-ok-->
     <dependencyManagement>
         <dependencies>
-
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -49,9 +46,10 @@
     
         <!-- Source: https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
-            <version>2.1</version>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>5.5.6</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- Source: https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
