@@ -11,6 +11,9 @@ This repository contains an automated REST API test suite for the [Swagger Petst
 The project demonstrates API testing using REST Assured, JUnit 5, Maven, Allure Report, and GitHub Actions CI/CD.
 
 ## Allure Test Report
+
+The automated test results and execution reports are generated and published automatically via GitHub Actions:
+
 ![Allure Report](docs/assets/img/allure_report.png)
 📊 [View the Allure Report](https://nagraggini.github.io/petstore/)
 
